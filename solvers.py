@@ -1,6 +1,9 @@
 """Routines for solving a linear system of equations."""
 import numpy as np
 
+# Tolerance value when checking for linear dependency
+_TOLERANCE = 1e-12
+
 
 def gaussian_eliminate(aa, bb):
     """Solves a linear system of equations (Ax = b) by Gauss-elimination
@@ -14,8 +17,10 @@ def gaussian_eliminate(aa, bb):
         if the equations are linearly dependent.
     """
     nn = aa.shape[0]
-    for ii in range(nn - 1):
+    for ii in range(nn):
         _make_partial_pivot(aa[ii:, :], bb[ii:], ii)
+        if abs(aa[ii, ii]) < _TOLERANCE:
+            return None
         for jj in range(ii + 1, nn):
             coeff = -aa[jj, ii] / aa[ii, ii]
             aa[jj, ii:] += coeff * aa[ii, ii:]
