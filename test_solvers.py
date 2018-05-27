@@ -1,35 +1,49 @@
 #!/usr/bin/env python3
 """Contains routines to test the solvers module"""
 
+import os.path
+import pytest
 import numpy as np
 import solvers
 
 
 TOLERANCE = 1e-10
+TESTDATADIR = 'testdata'
+
+TESTS_SUCCESSFUL = ['simple', 'needs_pivot']
+
+TESTS_LINEARDEP = ['linearly_dependant']
 
 
-def test_elimination():
-    "Tests simple elimination"
-    aa = np.array([[2.0, 4.0, 4.0], [5.0, 4.0, 2.0], [1.0, 2.0, -1.0]])
-    bb = np.array([1.0, 4.0, 2.0])
-    xx_expected = np.array([0.666666666666667, 0.416666666666667, -0.5])
+def get_test_input(testname):
+    "Reads the input for a given test."
+    testinfile = os.path.join(TESTDATADIR, testname + '.in')
+    data = np.loadtxt(testinfile)
+    nn = data.shape[1]
+    aa = data[:nn, :]
+    bb = data[nn, :]
+    return aa, bb
+
+
+def get_test_output(testname):
+    "Reads the ouput for a given test."
+    testoutfile = os.path.join(TESTDATADIR, testname + '.out')
+    data = np.loadtxt(testoutfile)
+    return data
+
+
+@pytest.mark.parametrize("testname", TESTS_SUCCESSFUL)
+def test_successful_elimination(testname):
+    "Tests successful elimination."
+    aa, bb = get_test_input(testname)
+    xx_expected = get_test_output(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
     assert np.all(np.abs(xx_gauss - xx_expected) < TOLERANCE)
 
 
-def test_elimination_needing_pivot():
-    "Tests elimination where pivot is needed"
-    aa = np.array([[2.0, 4.0, 4.0], [1.0, 2.0, -1.0], [5.0, 4.0, 2.0]])
-    bb = np.array([1.0, 2.0, 4.0])
-    xx_expected = np.array([0.666666666666667, 0.416666666666667, -0.5])
-    xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    assert np.all(np.abs(xx_gauss - xx_expected) < TOLERANCE)
-
-
-def test_elimination_linear_dep():
-    "Tests detection of linear dependency"
-    aa = np.array([[1.0, 2.0, 3.0], [4.0, 5.0, 6.0], [7.0, 8.0, 9.0]])
-    bb = np.array([1.0, 2.0, 3.0])
+@pytest.mark.parametrize("testname", TESTS_LINEARDEP)
+def test_linear_dependancy(testname):
+    "Tests linear dependancy"
+    aa, bb = get_test_input(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
     assert xx_gauss is None
-
