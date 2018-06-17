@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+'''Solves a linear system of equations.'''
+import sys
+import solvers
+import linsolveio as io
+
+INPUT_FILE = 'linsolve.in'
+OUTPUT_FILE = 'linsolve.out'
+
+
+def main():
+    '''Main driver routine.'''
+    try:
+        aa, bb = io.read_input(INPUT_FILE)
+    except OSError as exc:
+        print("Failed to read input file '{}'".format(INPUT_FILE))
+        print("Execption raised: {}".format(exc))
+        sys.exit(1)
+    try:
+        xx = solvers.gaussian_eliminate(aa, bb)
+    except ValueError:
+        io.write_error(OUTPUT_FILE, "LINDEP", "Linearly dependent equations")
+    else:
+        io.write_result(OUTPUT_FILE, xx)
+
+
+if __name__ == '__main__':
+    main()
