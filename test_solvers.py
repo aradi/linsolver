@@ -5,6 +5,7 @@ import os.path
 import pytest
 import numpy as np
 import solvers
+import linsolveio as io
 
 
 ABSOLUTE_TOLERANCE = 1e-10
@@ -20,18 +21,15 @@ TESTS_LINEARDEP = ['linearly_dependant']
 def get_test_input(testname):
     "Reads the input for a given test."
     testinfile = os.path.join(TESTDATADIR, testname + '.in')
-    data = np.loadtxt(testinfile)
-    nn = data.shape[1]
-    aa = data[:nn, :]
-    bb = data[nn, :]
+    aa, bb = io.read_input(testinfile)
     return aa, bb
 
 
 def get_test_output(testname):
-    "Reads the ouput for a given test."
+    "Reads the reference ouput for a given test."
     testoutfile = os.path.join(TESTDATADIR, testname + '.out')
-    data = np.loadtxt(testoutfile)
-    return data
+    result = io.read_result(testoutfile)
+    return result
 
 
 @pytest.mark.parametrize("testname", TESTS_SUCCESSFUL)

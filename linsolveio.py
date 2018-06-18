@@ -1,6 +1,9 @@
-'''Contains input output routines for the solver program.'''
+'''Contains input output routines for the equation solver.'''
 import sys
 import numpy as np
+
+
+_ERROR_PREFIX = "ERROR::"
 
 
 def read_input(inputfile):
@@ -22,7 +25,7 @@ def read_input(inputfile):
 
 
 def write_error(filename, errortype, errormsg):
-    '''Writes an output file with an error message
+    '''Writes an output file with an error message.
     
     Args:
         filename: Name of the file to write.
@@ -30,7 +33,7 @@ def write_error(filename, errortype, errormsg):
         errormsg: Longer string containing the error message.
     '''
     with open(filename, 'w') as fp:
-        fp.write('ERROR::{}: {}\n'.format(errortype, errormsg))
+        fp.write('{}{}: {}\n'.format(_ERROR_PREFIX, errortype, errormsg))
 
 
 def write_result(filename, xx):
@@ -44,3 +47,21 @@ def write_result(filename, xx):
     # vector appear in one row.
     xrow = np.reshape(xx, (1, -1))
     np.savetxt(filename, xrow)
+
+
+def read_result(resultfile):
+    '''Reads the result written by the solver (used for testing).
+
+    Args:
+        resultfile: Result file to read.
+
+    Returns:
+        Result vector x.
+    '''
+    with open(resultfile, 'r') as fp:
+        line = fp.readline()
+    if line.startswith(_ERROR_PREFIX):
+        xx = None
+    else:
+        xx = np.loadtxt(resultfile)
+    return xx
