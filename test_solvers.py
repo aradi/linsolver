@@ -13,9 +13,7 @@ RELATIVE_TOLERANCE = 1e-10
 
 TESTDATADIR = 'testdata'
 
-TESTS_SUCCESSFUL = ['simple', 'needs_pivot']
-
-TESTS_LINEARDEP = ['linearly_dependant']
+TESTS = ['simple', 'needs_pivot', 'linearly_dependant']
 
 
 def get_test_input(testname):
@@ -32,22 +30,19 @@ def get_test_output(testname):
     return result
 
 
-@pytest.mark.parametrize("testname", TESTS_SUCCESSFUL)
-def test_successful_elimination(testname):
-    "Tests successful elimination."
+@pytest.mark.parametrize("testname", TESTS)
+def test_elimination(testname):
+    "Tests elimination."
     aa, bb = get_test_input(testname)
     xx_expected = get_test_output(testname)
-    xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE,
-                       rtol=RELATIVE_TOLERANCE)
-
-
-@pytest.mark.parametrize("testname", TESTS_LINEARDEP)
-def test_linear_dependancy(testname):
-    "Tests linear dependancy"
-    aa, bb = get_test_input(testname)
-    with pytest.raises(ValueError):
-        solvers.gaussian_eliminate(aa, bb)
+    if xx_expected is None:
+        # Linear system of equations can not be solved -> expecting exception
+        with pytest.raises(ValueError):
+            solvers.gaussian_eliminate(aa, bb)
+    else:
+        xx_gauss = solvers.gaussian_eliminate(aa, bb)
+        assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE,
+                           rtol=RELATIVE_TOLERANCE)
 
 
 if __name__ == '__main__':
