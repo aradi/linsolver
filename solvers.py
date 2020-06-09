@@ -13,8 +13,7 @@ def gaussian_eliminate(aa, bb):
         bb: Right hand side of the equation. Shape: (n,)
 
     Returns:
-        Vector xx with the solution of the linear equation or None
-        if the equations are linearly dependent.
+        Vector xx with the solution of the linear equation.
 
     Raises:
         ValueError: if the system of equation is close to linear dependency.

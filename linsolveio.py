@@ -9,13 +9,12 @@ _ERROR_PREFIX = "ERROR::"
 def read_input(inputfile):
     '''Reads the input for the solver.
 
-    Note: It calls sys.exit() if the reading the input fails for any reasons.
-
     Args:
         inputfile: Name of the input file.
 
     Returns:
-        Content of the input file.
+        Tuple (A, b) containing the coefficient matrix A and RHS of the
+        equation b.
     '''
     inparray = np.loadtxt(inputfile)
     ndim = inparray.shape[1]
@@ -56,7 +55,7 @@ def read_result(resultfile):
         resultfile: Result file to read.
 
     Returns:
-        Result vector x.
+        Result vector x or None, if the result file contained an error message.
     '''
     with open(resultfile, 'r') as fp:
         line = fp.readline()
