@@ -50,3 +50,7 @@ def test_linear_dependancy(testname):
     aa, bb = get_test_input(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
     assert xx_gauss is None
+
+
+if __name__ == '__main__':
+    pytest.main()
