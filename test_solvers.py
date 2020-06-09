@@ -7,7 +7,9 @@ import numpy as np
 import solvers
 
 
-TOLERANCE = 1e-10
+ABSOLUTE_TOLERANCE = 1e-10
+RELATIVE_TOLERANCE = 1e-10
+
 TESTDATADIR = 'testdata'
 
 TESTS_SUCCESSFUL = ['simple', 'needs_pivot']
@@ -38,7 +40,8 @@ def test_successful_elimination(testname):
     aa, bb = get_test_input(testname)
     xx_expected = get_test_output(testname)
     xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    assert np.all(np.abs(xx_gauss - xx_expected) < TOLERANCE)
+    assert np.allclose(xx_gauss, xx_expected, atol=ABSOLUTE_TOLERANCE,
+                       rtol=RELATIVE_TOLERANCE)
 
 
 @pytest.mark.parametrize("testname", TESTS_LINEARDEP)
