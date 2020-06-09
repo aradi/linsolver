@@ -4,5 +4,4 @@
 __pycache__
 .cache
 .coverage
-.pytest_cache
-.spyproject
+docs/_build
