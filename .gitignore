@@ -1,2 +1,6 @@
 .spyderproject
 __pycache__
+.cache
+.coverage
+.pytest_cache
+.spyproject
