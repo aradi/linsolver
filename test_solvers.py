@@ -48,8 +48,8 @@ def test_successful_elimination(testname):
 def test_linear_dependancy(testname):
     "Tests linear dependancy"
     aa, bb = get_test_input(testname)
-    xx_gauss = solvers.gaussian_eliminate(aa, bb)
-    assert xx_gauss is None
+    with pytest.raises(ValueError):
+        solvers.gaussian_eliminate(aa, bb)
 
 
 if __name__ == '__main__':

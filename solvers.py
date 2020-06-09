@@ -15,12 +15,16 @@ def gaussian_eliminate(aa, bb):
     Returns:
         Vector xx with the solution of the linear equation or None
         if the equations are linearly dependent.
+
+    Raises:
+        ValueError: if the system of equation is close to linear dependency.
     """
     nn = aa.shape[0]
     for ii in range(nn):
         _make_partial_pivot(aa[ii:, :], bb[ii:], ii)
         if abs(aa[ii, ii]) < _TOLERANCE:
-            return None
+            msg = "System of equations is linearly dependent"
+            raise ValueError(msg)
         for jj in range(ii + 1, nn):
             coeff = -aa[jj, ii] / aa[ii, ii]
             aa[jj, ii:] += coeff * aa[ii, ii:]
