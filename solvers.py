@@ -2,7 +2,7 @@
 import numpy as np
 
 # Tolerance value when checking for linear dependency
-_TOLERANCE = 1e-10
+_TOLERANCE = 1e-11
 
 
 def gaussian_eliminate(aa, bb):
